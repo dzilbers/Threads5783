@@ -1,0 +1,11 @@
+﻿<Application x:Class="ThreadsWpfTask.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ThreadsWpfTask"
+             StartupUri="WindowAccount.xaml">
+    <Application.Resources>
+        <Style x:Key="WinAll" TargetType="{x:Type Window}">
+            <Setter Property="FontSize" Value="24pt" />
+        </Style>
+    </Application.Resources>
+</Application>
