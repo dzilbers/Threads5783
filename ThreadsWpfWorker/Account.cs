@@ -16,6 +16,8 @@ namespace ThreadsWpfWorker
         private static void accountClosedHandler()
         {
             AccountClosed?.Invoke(account, new EventArgs());
+            //if (AccountClosed != null)
+            //    AccountClosed(account, new EventArgs());
         }
 
         public static event EventHandler<AccountEventArgs> BalanceChanged;

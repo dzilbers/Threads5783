@@ -76,6 +76,7 @@ namespace ThreadsConsole1
         static void Main(string[] args)
         {
             Account myAccount = new Account(1000, 2);
+            Console.WriteLine("Test");
         }
     }
 }

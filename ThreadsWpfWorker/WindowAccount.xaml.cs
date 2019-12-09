@@ -79,6 +79,7 @@ namespace ThreadsWpfWorker
                 myAccount.Close();
             Button button = sender as Button;
             button.Content = "Closing";
+            lblBalance.Content = "Closing in:";
             button.IsEnabled = false;
         }
         private void textBox_PreviewKeyDown(object sender, KeyEventArgs e)

@@ -37,8 +37,8 @@ namespace ThreadsWpf1
             // Comment it out
             //updateBalance(args.Balance);
             // Uncomment one of the next two lines it upon commenting out the above line
-            UpdateBalance(args.Balance);
-            //UpdateBalanceCond(args.Balance);
+            //UpdateBalance(args.Balance);
+            UpdateBalanceCond(args.Balance);
             //UpdateBalance2(args.Balance);
             //UpdateBalance3(args.Balance);
 
@@ -120,6 +120,7 @@ namespace ThreadsWpf1
             Button button = sender as Button;
             button.Content = "Closing";
             button.IsEnabled = false;
+            lblBalance.Content = "Closing in:";
             //Form2.Form2Create();
         }
         private void textBox_PreviewKeyDown(object sender, KeyEventArgs e)
