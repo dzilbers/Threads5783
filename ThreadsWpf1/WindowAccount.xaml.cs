@@ -35,12 +35,12 @@ namespace ThreadsWpf1
         {
             // Before changing to Dispatcher - crashes with InvalidOperation
             // Comment it out
-            //updateBalance(args.Balance);
+            // updateBalance(args.Balance);
             // Uncomment one of the next two lines it upon commenting out the above line
             //UpdateBalance(args.Balance);
-            UpdateBalanceCond(args.Balance);
+            //UpdateBalanceCond(args.Balance);
             //UpdateBalance2(args.Balance);
-            //UpdateBalance3(args.Balance);
+            UpdateBalance3(args.Balance);
 
         }
 

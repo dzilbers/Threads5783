@@ -41,13 +41,14 @@ namespace ThreadsWpfWorker
         }
 
         private readonly int interestRate; // integer % number
-        private volatile bool _shouldStop;
+        //private volatile bool _shouldStop;
         private Thread myThread = null;
+        private BackgroundWorker worker = new BackgroundWorker();
         public Account(int initBalance, int interestRate)
         {
             this.Balance = initBalance;
             this.interestRate = interestRate;
-            BackgroundWorker worker = new BackgroundWorker();
+            //BackgroundWorker worker = new BackgroundWorker();
             worker.RunWorkerCompleted += (sender, args) => accountClosedHandler();
             worker.WorkerReportsProgress = true;
             worker.ProgressChanged += (sender, args) =>
@@ -60,9 +61,9 @@ namespace ThreadsWpfWorker
             worker.DoWork += (sender, args) =>
             {
                 myThread = Thread.CurrentThread;
-                _shouldStop = false;
+                //_shouldStop = false;
                 try { Thread.Sleep(3000); } catch (Exception) { } // 3 secs
-                while (!_shouldStop)
+                while (!worker.CancellationPending) //(!_shouldStop)
                 {
                     worker.ReportProgress(1);
                     try { Thread.Sleep(3000); } catch (Exception) { } // 3 secs
@@ -96,7 +97,8 @@ namespace ThreadsWpfWorker
 
         public void Close()
         {
-            _shouldStop = true;
+            //_shouldStop = true;
+            worker.CancelAsync();
             myThread.Interrupt();
         }
     }
