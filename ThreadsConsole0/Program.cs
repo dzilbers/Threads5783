@@ -75,6 +75,7 @@ namespace ThreadsConsole0
         {
             Account myAccount = new Account(1000, 2);
             myAccount.interestLoop();
+            Console.WriteLine("I am here");
         }
     }
 }

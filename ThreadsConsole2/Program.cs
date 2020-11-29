@@ -8,13 +8,17 @@ namespace ThreadsConsole2
 {
     class Account
     {
+        static int counter = 0;
+        int number;
         private int balance;
         private readonly int interestRate; // integer % number
         public Account(int initBalance, int interestRate)
         {
+            this.number = ++counter;
             this.balance = initBalance;
             this.interestRate = interestRate;
-            Thread th = new Thread(interestLoop);
+            Thread th = new Thread(interestLoop); // TCB
+            th.Name = "Thread-" + this.number;
             th.Start();
         }
 
@@ -60,7 +64,7 @@ namespace ThreadsConsole2
 
         private void timeOutput()
         {
-            Console.Write("{0}: ", DateTime.Now.ToString("HH:mm:ss"));
+            Console.Write("Account-{1} - {0}: ", DateTime.Now.ToString("HH:mm:ss"), this.number);
         }
         private void out1(string loc)
         {
@@ -77,6 +81,12 @@ namespace ThreadsConsole2
         static void Main(string[] args)
         {
             Account myAccount = new Account(1000, 2);
+            Thread.Sleep(300);
+            new Account(200, 1);
+            Thread.Sleep(300);
+            new Account(3000, 2);
+            Thread.Sleep(300);
+            new Account(10000, 3);
             while (true)
             {
                 Thread.Sleep(1000);
