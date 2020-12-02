@@ -35,8 +35,9 @@ namespace ThreadsWpfWorker
             updateBalance(args.Balance);
         }
 
-        private void windowAccountClosedObserver(object sender, EventArgs args)
+        private void windowAccountClosedObserver(object sender, AccountEventArgs args)
         {
+            MessageBoxResult result = MessageBox.Show("" + args.Balance, "Results", MessageBoxButton.OKCancel);
             myClosing = true;
             Account.BalanceChanged -= windowAccountObserver;
             Account.AccountClosed -= windowAccountClosedObserver;

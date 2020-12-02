@@ -54,7 +54,7 @@ namespace ThreadsWpfWorker
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            Dispatcher.BeginInvokeShutdown(DispatcherPriority.Background);
+            //Dispatcher.BeginInvokeShutdown(DispatcherPriority.Background);
         }
     }
 }
