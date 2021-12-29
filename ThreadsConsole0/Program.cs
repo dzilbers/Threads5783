@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 
 namespace ThreadsConsole0
@@ -42,7 +40,7 @@ namespace ThreadsConsole0
         {
             timeOutput();
             out1("applyInterest");
-            balance = (balance * (100 + interestRate)) / 100;
+            balance = balance * (100 + interestRate) / 100;
             out2();
         }
 

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 
-namespace ThreadsConsole1
+namespace ThreadsCons0
 {
     class Account
     {
@@ -11,7 +13,6 @@ namespace ThreadsConsole1
         {
             this.balance = initBalance;
             this.interestRate = interestRate;
-            interestLoop();
         }
 
         public void Deposit(int amount)
@@ -73,7 +74,8 @@ namespace ThreadsConsole1
         static void Main(string[] args)
         {
             Account myAccount = new Account(1000, 2);
-            Console.WriteLine("Test");
+            myAccount.interestLoop();
+            Console.WriteLine("I am here");
         }
     }
 }
