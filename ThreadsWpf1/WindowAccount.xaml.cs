@@ -22,18 +22,13 @@ namespace ThreadsWpf1
         private bool myClosing = false;
         private bool stopMessageBox = false;
 
-        private void windowAccountObserver(object sender, AccountEventArgs args)
-        {
+        private void windowAccountObserver(object sender, AccountEventArgs args) =>
             // Before changing to Dispatcher - crashes with InvalidOperation
             // Comment it out
             //updateBalance(args.Balance);
             // Uncomment one of the next two lines it upon commenting out the above line
             //UpdateBalance(args.Balance);
-            UpdateBalanceCond(args.Balance);
-            //UpdateBalance2(args.Balance);
-            //UpdateBalance3(args.Balance);
-
-        }
+            UpdateBalanceCond(args.Balance);//UpdateBalance2(args.Balance);//UpdateBalance3(args.Balance);
 
         private void updateBalance(int balance)
         {
@@ -74,10 +69,7 @@ namespace ThreadsWpf1
             worker.RunWorkerAsync(balance);
         }
 
-        public async void UpdateBalance3(int balance)
-        {
-            await Task.Run(() => updateBalance(balance));
-        }
+        public async void UpdateBalance3(int balance) => await Task.Run(() => updateBalance(balance));
 
         // Example for avoiding closint the window...
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -162,12 +154,9 @@ namespace ThreadsWpf1
             return stopMessageBox ? false : balance < 500;
         }
 
-        private void UpdateBalanceCond(int balance)
-        {
-            warnLowBalance(CheckAccess() ? updateBalanceCond(balance) :
+        private void UpdateBalanceCond(int balance) => warnLowBalance(CheckAccess() ? updateBalanceCond(balance) :
                            (bool)Dispatcher.Invoke((Predicate<int>)(x => updateBalanceCond(x)), balance)
                           );
-        }
 
         public void UpdateBalanceCond2(int balance)
         {
@@ -179,10 +168,7 @@ namespace ThreadsWpf1
             worker.RunWorkerAsync(balance);
         }
 
-        public async void UpdateBalanceCond3(int balance)
-        {
-            warnLowBalance(await Task<bool>.Run(() => updateBalanceCond(balance)));
-        }
+        public async void UpdateBalanceCond3(int balance) => warnLowBalance(await Task<bool>.Run(() => updateBalanceCond(balance)));
 
         private bool warned = false;
         private void warnLowBalance(bool check)
@@ -204,10 +190,6 @@ namespace ThreadsWpf1
         }
 
         private static int counter = 0;
-        private void btnOther_Click(object sender, RoutedEventArgs e)
-        {
-            new OtherWindow(++counter).Show();
-            //OtherWindow.Create("Thread " + ++counter, counter);
-        }
+        private void btnOther_Click(object sender, RoutedEventArgs e) => new OtherWindow(++counter).Show();//OtherWindow.Create("Thread " + ++counter, counter);
     }
 }

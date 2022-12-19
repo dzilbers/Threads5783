@@ -1,16 +1,16 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31911.196
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadsConsole0", "ThreadsConsole0\ThreadsConsole0.csproj", "{23852059-065F-46B5-9C02-557638C1C671}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThreadsConsole0", "ThreadsConsole0\ThreadsConsole0.csproj", "{23852059-065F-46B5-9C02-557638C1C671}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadsConsole1", "ThreadsConsole1\ThreadsConsole1.csproj", "{D4BAE569-B600-4B27-9EED-B54E5A7B521C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThreadsConsole1", "ThreadsConsole1\ThreadsConsole1.csproj", "{D4BAE569-B600-4B27-9EED-B54E5A7B521C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadsConsole2", "ThreadsConsole2\ThreadsConsole2.csproj", "{6DB8AF83-84FB-4EF2-80DB-1D8A6630B6E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThreadsConsole2", "ThreadsConsole2\ThreadsConsole2.csproj", "{6DB8AF83-84FB-4EF2-80DB-1D8A6630B6E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadsConsole3", "ThreadsConsole3\ThreadsConsole3.csproj", "{6D042DBD-6BA2-4130-80CE-B5507FC5453E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThreadsConsole3", "ThreadsConsole3\ThreadsConsole3.csproj", "{6D042DBD-6BA2-4130-80CE-B5507FC5453E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadsConsole4", "ThreadsConsole4\ThreadsConsole4.csproj", "{39001DA8-EA9C-4EF2-924D-7B4CEC91B99A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThreadsConsole4", "ThreadsConsole4\ThreadsConsole4.csproj", "{39001DA8-EA9C-4EF2-924D-7B4CEC91B99A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadsWpf1", "ThreadsWpf1\ThreadsWpf1.csproj", "{83E4E130-B664-45D8-BB09-64835A526AAD}"
 EndProject
@@ -18,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadsWpfWorker", "Threads
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadsWpfTask", "ThreadsWpfTask\ThreadsWpfTask.csproj", "{071ECB1D-8EDE-4298-ABCE-46EC7F585376}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadsCons0", "ThreadsCons0\ThreadsCons0.csproj", "{19D5F016-7C24-4217-953B-E129B3A71CA5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{303EB9DA-AABD-484F-9973-FBD36D95A49E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -116,18 +116,6 @@ Global
 		{071ECB1D-8EDE-4298-ABCE-46EC7F585376}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{071ECB1D-8EDE-4298-ABCE-46EC7F585376}.Release|x86.ActiveCfg = Release|Any CPU
 		{071ECB1D-8EDE-4298-ABCE-46EC7F585376}.Release|x86.Build.0 = Release|Any CPU
-		{19D5F016-7C24-4217-953B-E129B3A71CA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{19D5F016-7C24-4217-953B-E129B3A71CA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{19D5F016-7C24-4217-953B-E129B3A71CA5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{19D5F016-7C24-4217-953B-E129B3A71CA5}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{19D5F016-7C24-4217-953B-E129B3A71CA5}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{19D5F016-7C24-4217-953B-E129B3A71CA5}.Debug|x86.Build.0 = Debug|Any CPU
-		{19D5F016-7C24-4217-953B-E129B3A71CA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{19D5F016-7C24-4217-953B-E129B3A71CA5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{19D5F016-7C24-4217-953B-E129B3A71CA5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{19D5F016-7C24-4217-953B-E129B3A71CA5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{19D5F016-7C24-4217-953B-E129B3A71CA5}.Release|x86.ActiveCfg = Release|Any CPU
-		{19D5F016-7C24-4217-953B-E129B3A71CA5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

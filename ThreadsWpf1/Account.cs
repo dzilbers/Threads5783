@@ -18,6 +18,7 @@ namespace ThreadsWpf1
             {
                 new Thread((obj) => BalanceChanged(this, (AccountEventArgs)obj)
                           ).Start(new AccountEventArgs(balance));
+                //BalanceChanged(this, new AccountEventArgs(balance));
             }
         }
 
@@ -41,7 +42,7 @@ namespace ThreadsWpf1
         private volatile AccountState _shouldStop;
         public Account(int initBalance, int interestRate)
         {
-            this.Balance = initBalance;
+            Balance = initBalance;
             this.interestRate = interestRate;
             new Thread(() =>
             {
@@ -61,10 +62,7 @@ namespace ThreadsWpf1
             }).Start();
         }
 
-        public void Deposit(int amount)
-        {
-            Balance += amount;
-        }
+        public void Deposit(int amount) => Balance += amount;
 
         public bool Withdraw(int amount)
         {
@@ -73,15 +71,9 @@ namespace ThreadsWpf1
             return true;
         }
 
-        private void applyInterest()
-        {
-            Balance = (Balance * (100 + interestRate)) / 100;
-        }
+        private void applyInterest() => Balance = (Balance * (100 + interestRate)) / 100;
 
-        public void Close(bool upd)
-        {
-            _shouldStop = upd ? AccountState.STOPCLOSED : AccountState.STOP;
-        }
+        public void Close(bool upd) => _shouldStop = upd ? AccountState.STOPCLOSED : AccountState.STOP;
 
         public bool threadFinished(bool sync)
         {

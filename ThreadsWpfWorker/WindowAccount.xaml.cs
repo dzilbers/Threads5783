@@ -18,10 +18,7 @@ namespace ThreadsWpfWorker
         private Account myAccount;
         private bool myClosing = false;
 
-        private void windowAccountObserver(object sender, AccountEventArgs args)
-        {
-            updateBalance(args.Balance);
-        }
+        private void windowAccountObserver(object sender, AccountEventArgs args) => updateBalance(args.Balance);
 
         private void windowAccountClosedObserver(object sender, AccountEventArgs args)
         {
@@ -40,10 +37,7 @@ namespace ThreadsWpfWorker
             // Window.GetWindow(this).Close();
         }
 
-        private void updateBalance(int balance)
-        {
-            txtBalance.Content = String.Format("{0}", balance);
-        }
+        private void updateBalance(int balance) => txtBalance.Content = String.Format("{0}", balance);
 
         // Example for avoiding closing the window...
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -114,10 +108,6 @@ namespace ThreadsWpfWorker
         }
 
         private static int counter = 0;
-        private void btnOther_Click(object sender, RoutedEventArgs e)
-        {
-            new OtherWindow(++counter).Show();
-            //OtherWindow.Create("Thread " + ++counter, counter);
-        }
+        private void btnOther_Click(object sender, RoutedEventArgs e) => new OtherWindow(++counter).Show();//OtherWindow.Create("Thread " + ++counter, counter);
     }
 }

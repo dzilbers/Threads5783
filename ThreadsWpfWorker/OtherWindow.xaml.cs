@@ -47,10 +47,7 @@ namespace ThreadsWpfWorker
             thread.Start();
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
-        {
-            label.Content = "" + (int.Parse((string)label.Content) + 1);
-        }
+        private void button_Click(object sender, RoutedEventArgs e) => label.Content = "" + (int.Parse((string)label.Content) + 1);
 
         private void Window_Closed(object sender, EventArgs e)
         {

@@ -9,18 +9,10 @@ namespace ThreadsWpfWorker
         private static Account account = null;
 
         public static event EventHandler<AccountEventArgs> AccountClosed;
-        private static void accountClosedHandler(object result)
-        {
-            AccountClosed?.Invoke(account, new AccountEventArgs((int)result));
-            //if (AccountClosed != null)
-            //    AccountClosed(account, new EventArgs());
-        }
+        private static void accountClosedHandler(object result) => AccountClosed?.Invoke(account, new AccountEventArgs((int)result));//if (AccountClosed != null)//    AccountClosed(account, new EventArgs());
 
         public static event EventHandler<AccountEventArgs> BalanceChanged;
-        private static void balanceChangedHandler(int balance)
-        {
-            BalanceChanged?.Invoke(account, new AccountEventArgs(balance));
-        }
+        private static void balanceChangedHandler(int balance) => BalanceChanged?.Invoke(account, new AccountEventArgs(balance));
 
         private int balance;
         private int Balance
@@ -42,7 +34,7 @@ namespace ThreadsWpfWorker
         private BackgroundWorker worker = new BackgroundWorker();
         public Account(int initBalance, int interestRate)
         {
-            this.Balance = initBalance;
+            Balance = initBalance;
             this.interestRate = interestRate;
             //BackgroundWorker worker = new BackgroundWorker();
             worker.RunWorkerCompleted += (sender, args) => accountClosedHandler(args.Result);
@@ -77,10 +69,7 @@ namespace ThreadsWpfWorker
             worker.RunWorkerAsync();
         }
 
-        public void Deposit(int amount)
-        {
-            Balance += amount;
-        }
+        public void Deposit(int amount) => Balance += amount;
 
         public bool Withdraw(int amount)
         {
@@ -89,10 +78,7 @@ namespace ThreadsWpfWorker
             return true;
         }
 
-        private void applyInterest()
-        {
-            worker.ReportProgress(1, (Balance * (100 + interestRate)) / 100);
-        }
+        private void applyInterest() => worker.ReportProgress(1, (Balance * (100 + interestRate)) / 100);
 
         public void Close()
         {

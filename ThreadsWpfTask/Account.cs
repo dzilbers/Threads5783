@@ -13,10 +13,7 @@ namespace ThreadsWpfTask
         private static Account account = null;
 
         public static event EventHandler<AccountEventArgs> BalanceChanged;
-        private static void balanceChangedHandler(int balance)
-        {
-            BalanceChanged?.Invoke(account, new AccountEventArgs(balance));
-        }
+        private static void balanceChangedHandler(int balance) => BalanceChanged?.Invoke(account, new AccountEventArgs(balance));
 
         private int balance;
         private int Balance
@@ -38,7 +35,7 @@ namespace ThreadsWpfTask
         public Account(int initBalance, int interestRate)
         {
             account = this;
-            this.Balance = initBalance;
+            Balance = initBalance;
             this.interestRate = interestRate;
         }
 
@@ -73,10 +70,7 @@ namespace ThreadsWpfTask
             }
         }
 
-        public void Deposit(int amount)
-        {
-            Balance += amount;
-        }
+        public void Deposit(int amount) => Balance += amount;
 
         public bool Withdraw(int amount)
         {
@@ -85,10 +79,7 @@ namespace ThreadsWpfTask
             return true;
         }
 
-        private void applyInterest()
-        {
-            Balance = (Balance * (100 + interestRate)) / 100;
-        }
+        private void applyInterest() => Balance = (Balance * (100 + interestRate)) / 100;
 
         public void Close()
         {
