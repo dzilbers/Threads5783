@@ -20,13 +20,13 @@ public partial class WindowAccount : Window
     public static readonly DependencyProperty ActiveProp = DependencyProperty.Register(nameof(Active), typeof(bool), typeof(WindowAccount));
     bool Active { get => (bool)GetValue(ActiveProp); set => SetValue(ActiveProp, value); }
 
-    public WindowAccount() 
+    public WindowAccount()
     {
         Active = true;
         InitializeComponent();
     }
 
-    enum Examples : uint { Buggy, Fixed, Conditional } 
+    enum Examples : uint { Buggy, Fixed, Conditional }
     // change the initialization for appropriate example Buggy => Fixed => Conditional
     static readonly Examples s_example = Examples.Buggy;
 
@@ -61,6 +61,9 @@ public partial class WindowAccount : Window
     }
 
     void updateBalanceThreadSafe(int balance)
+    // Microsoft recommendation is not using CheckAccess() but simply doing as follows:
+    // => Dispatcher.BeginInvoke((Action<int>)(x => updateBalance(x)), balance);
+    // however it forces going through event loop even when it's not required (if we are already in the UI thread)
     {
         if (CheckAccess())
             updateBalance(balance);
@@ -146,8 +149,12 @@ public partial class WindowAccount : Window
         return !_stopMessageBox && balance < 500;
     }
 
-    void updateBalanceCondThreadSafe(int balance) => warnLowBalance(CheckAccess() ? updateBalanceCond(balance) :
-                       (bool)Dispatcher.Invoke((Predicate<int>)(x => updateBalanceCond(x)), balance)
+    void updateBalanceCondThreadSafe(int balance) =>
+        // Microsoft recommendation is not using CheckAccess() but simply doing as follows:
+        // warnLowBalance((bool)Dispatcher.Invoke((Predicate<int>)(x => updateBalanceCond(x)), balance));
+        // however it forces going through event loop even when it's not required (if we are already in the UI thread)
+        warnLowBalance(CheckAccess() ? updateBalanceCond(balance)
+                                     : (bool)Dispatcher.Invoke((Predicate<int>)(x => updateBalanceCond(x)), balance)
                       );
 
     bool _warned = false;
