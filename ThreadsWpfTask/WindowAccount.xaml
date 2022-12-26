@@ -10,8 +10,19 @@
         Style="{StaticResource WinAll}">
     <StackPanel Background="LightBlue">
         <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" VerticalAlignment="Top" Margin="10,10,10,10">
-            <Label x:Name="lblBalance" Content="Balance:" Width="160pt" HorizontalContentAlignment="Right"/>
-            <Label x:Name="txtBalance" Content="0" Foreground="#FFE02000"/>
+            <Label Width="160pt" HorizontalContentAlignment="Right">
+                <Label.Style>
+                    <Style TargetType="Label">
+                        <Setter Property="Content" Value="Balance:"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEnabled, ElementName=btnStop}" Value="false">
+                                <Setter Property="Content" Value="Closing in:"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+            <Label Content="{Binding Balance}" Foreground="#FFE02000"/>
         </StackPanel>
         <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Margin="10,10,10,10">
             <Label x:Name="lblDeposit" Content="Deposit:" HorizontalContentAlignment="Right" Width="160pt"/>
@@ -22,7 +33,18 @@
             <TextBox x:Name="txtWithdraw" Text="" Width="150pt" PreviewKeyDown="textBox_PreviewKeyDown"/>
         </StackPanel>
         <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal" Margin="10,10,10,10">
-            <Button x:Name="btnStop"  Content="Stop" HorizontalAlignment="Right" Click="btnStop_Click" Width="150pt" Margin="10,0,0,0"/>
+            <Button Name="btnStop" HorizontalAlignment="Right" Click="btnStop_Click" Width="150pt" Margin="10,0,0,0" IsEnabled="{Binding Active}">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Content" Value="Stop"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Content" Value="Closing"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </StackPanel>
     </StackPanel>
 </Window>

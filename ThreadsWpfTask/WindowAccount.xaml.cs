@@ -7,14 +7,24 @@ using System.Windows.Input;
 /// </summary>
 public partial class WindowAccount : Window
 {
-    public WindowAccount() => InitializeComponent();
-
     Account? _myAccount;
     bool _myClosing = false;
 
+    public static readonly DependencyProperty BalanceProp = DependencyProperty.Register(nameof(Balance), typeof(int), typeof(WindowAccount));
+    int Balance { get => (int)GetValue(BalanceProp); set => SetValue(BalanceProp, value); }
+
+    public static readonly DependencyProperty ActiveProp = DependencyProperty.Register(nameof(Active), typeof(bool), typeof(WindowAccount));
+    bool Active { get => (bool)GetValue(ActiveProp); set => SetValue(ActiveProp, value); }
+
+    public WindowAccount()
+    {
+        Active = true;
+        InitializeComponent();
+    }
+
     void windowAccountObserver(object? sender, AccountEventArgs args) => updateBalance(args.Balance);
 
-    void updateBalance(int balance) => txtBalance.Content = String.Format("{0}", balance);
+    void updateBalance(int balance) => Balance = balance;
 
     // Example for avoiding closing the window...
     void window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
