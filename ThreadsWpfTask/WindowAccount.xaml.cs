@@ -57,54 +57,52 @@ public partial class WindowAccount : Window
 
     private void btnStop_Click(object sender, RoutedEventArgs e)
     {
-        if (_myAccount != null)
-        {
-            _myAccount.Close();
-            Button button = (Button)sender;
-            button.Content = "Closing";
-            button.IsEnabled = false;
-        }
-        //Form2.Form2Create();
+        _myAccount?.Close();
+        Active = false;
     }
-    private void textBox_PreviewKeyDown(object sender, KeyEventArgs e)
+
+    void textBox_PreviewKeyDown(object sender, KeyEventArgs e)
     {
         TextBox text = (TextBox)sender;
-        if (text == null) return;
-        if (e == null) return;
+        if (text is null || e is null) return;
 
-        if (e.Key == Key.Enter || e.Key == Key.Return)
+        switch (e.Key)
         {
-            if (text.Text.Length > 0)
-            {
-                int amount = int.Parse(text.Text);
-                text.Text = "";
-                if (sender == txtDeposit)
-                    _myAccount!.Deposit(amount);
-                else if (sender == txtWithdraw)
-                    if (!_myAccount!.Withdraw(amount))
-                        MessageBox.Show("You do not have enough money!", "Account",
-                                        MessageBoxButton.OK, MessageBoxImage.Exclamation);
-            }
-            e.Handled = true;
-            return;
+            case Key.Enter:
+                if (text.Text.Length > 0)
+                {
+                    int amount = int.Parse(text.Text);
+                    text.Text = "";
+                    if (sender == txtDeposit)
+                        _myAccount!.Deposit(amount);
+                    else if (sender == txtWithdraw)
+                        if (!_myAccount!.Withdraw(amount))
+                            MessageBox.Show("You do not have enough money!", "Account",
+                                            MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
+                e.Handled = true;
+                return;
+
+            // It`s a system key (add other key here if you want to allow)
+            case var key when key.In(Key.Escape, Key.Back, Key.Delete, Key.CapsLock,
+                                     Key.LeftShift, Key.RightShift, Key.LeftCtrl, Key.RightCtrl,
+                                     Key.LeftAlt, Key.RightAlt, Key.LWin, Key.RWin,
+                                     Key.System, Key.Left, Key.Up, Key.Down, Key.Right):
+                return;
         }
 
-        // It`s a system key (add other key here if you want to allow)
-        if (e.Key == Key.Escape || e.Key == Key.Tab || e.Key == Key.Back || e.Key == Key.Delete ||
-            e.Key == Key.CapsLock || e.Key == Key.LeftShift || e.Key == Key.RightShift ||
-            e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl || e.Key == Key.LeftAlt ||
-            e.Key == Key.RightAlt || e.Key == Key.LWin || e.Key == Key.RWin || e.Key == Key.System ||
-            e.Key == Key.Left || e.Key == Key.Up || e.Key == Key.Down || e.Key == Key.Right)
-            return;
-
         char c = (char)KeyInterop.VirtualKeyFromKey(e.Key);
-        if (Char.IsControl(c)) return;
-        if (Char.IsDigit(c))
-            if (!(Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift) ||
-                  Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) ||
-                  Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt)))
-                return;
+        if (Char.IsControl(c) ||
+           (Char.IsDigit(c) && !(Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift) ||
+                                 Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) ||
+                                 Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt)))) return;
+
         e.Handled = true;
         MessageBox.Show("Only numbers are allowed", "Account", MessageBoxButton.OK, MessageBoxImage.Error);
     }
+}
+
+static class Tools
+{
+    internal static bool In(this Key val, params Key[] vals) => vals.Contains(val);
 }

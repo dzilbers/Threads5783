@@ -57,8 +57,7 @@ public partial class WindowAccount : Window
         if (CheckAccess())
             updateBalance(balance);
         else
-            Dispatcher.BeginInvoke((Action<int>)
-                               (x => updateBalance(x)), balance);
+            Dispatcher.BeginInvoke((Action<int>)(x => updateBalance(x)), balance);
     }
 
     public void UpdateBalance2(int balance)
@@ -103,7 +102,6 @@ public partial class WindowAccount : Window
             new Thread(() => _myAccount.Close(true)).Start();
         _stopMessageBox = true;
         Active = false;
-        //Form2.Form2Create();
     }
 
     void textBox_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -135,7 +133,6 @@ public partial class WindowAccount : Window
                                      Key.System, Key.Left, Key.Up, Key.Down, Key.Right):
                 return;
         }
-
 
         char c = (char)KeyInterop.VirtualKeyFromKey(e.Key);
         if (Char.IsControl(c) ||
@@ -187,13 +184,9 @@ public partial class WindowAccount : Window
         else
             _warned = false;
     }
-
-    static int s_counter = 0;
-    void btnOther_Click(object sender, RoutedEventArgs e) => new OtherWindow(++s_counter).Show();
 }
 
 static class Tools
 {
     internal static bool In(this Key val, params Key[] vals) => vals.Contains(val);
-
 }

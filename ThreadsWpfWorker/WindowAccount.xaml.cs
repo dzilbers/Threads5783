@@ -96,7 +96,6 @@ public partial class WindowAccount : Window
                 return;
         }
 
-
         char c = (char)KeyInterop.VirtualKeyFromKey(e.Key);
         if (Char.IsControl(c) ||
            (Char.IsDigit(c) && !(Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift) ||
@@ -106,13 +105,9 @@ public partial class WindowAccount : Window
         e.Handled = true;
         MessageBox.Show("Only numbers are allowed", "Account", MessageBoxButton.OK, MessageBoxImage.Error);
     }
-
-    static int s_counter = 0;
-    void btnOther_Click(object sender, RoutedEventArgs e) => new OtherWindow(++s_counter).Show();
 }
 
 static class Tools
 {
     internal static bool In(this Key val, params Key[] vals) => vals.Contains(val);
-
 }
