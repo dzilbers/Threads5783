@@ -1,90 +1,85 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿namespace ThreadsWpfTask;
 
-namespace ThreadsWpfTask
+class Account
 {
-    class Account
+    private static Account? s_account = null;
+
+    public static event EventHandler<AccountEventArgs>? BalanceChanged;
+    private static void balanceChangedHandler(int balance) => BalanceChanged?.Invoke(s_account, new AccountEventArgs(balance));
+
+    private int _balance;
+    private int Balance
     {
-        private static Account account = null;
-
-        public static event EventHandler<AccountEventArgs> BalanceChanged;
-        private static void balanceChangedHandler(int balance) => BalanceChanged?.Invoke(account, new AccountEventArgs(balance));
-
-        private int balance;
-        private int Balance
+        get => _balance;
+        set
         {
-            get { return balance; }
-            set
+            if (_balance != value)
             {
-                if (balance != value)
-                {
-                    balance = value;
-                    balanceChangedHandler(value);
-                }
+                _balance = value;
+                balanceChangedHandler(value);
             }
         }
+    }
 
-        private readonly int interestRate; // integer % number
-        private volatile bool _shouldStop;
-        private Thread myThread = null;
-        public Account(int initBalance, int interestRate)
+    private readonly int _interestRate; // integer % number
+    private volatile bool _shouldStop;
+    private Thread? _myThread = null;
+    public Account(int initBalance, int interestRate)
+    {
+        s_account = this;
+        Balance = initBalance;
+        _interestRate = interestRate;
+    }
+
+    public void Deposit(int amount) => Balance += amount;
+
+    public bool Withdraw(int amount)
+    {
+        if (amount > Balance) return false;
+        Balance -= amount;
+        return true;
+    }
+
+    public async Task RunInterestTask()
+    {
+        // the progress object must be produced in the context of UI thread
+        IProgress<int> progress = new Progress<int>(p =>
         {
-            account = this;
-            Balance = initBalance;
-            this.interestRate = interestRate;
-        }
+            if (p == 1)
+                applyInterest();
+            else
+                Balance = 100 - p;
+        });
+        await Task.Run(() => interestLoop(progress));
+    }
 
-        public async Task RunInterestTask()
+    void applyInterest() => Balance = (Balance * (100 + _interestRate)) / 100;
+    void interestLoop(IProgress<int> progress)
+    {
+        _myThread = Thread.CurrentThread;
+        _shouldStop = false;
+        sleep(3.0); // 3 secs
+        while (!_shouldStop)
         {
-            // the progress object must be produced in the context of UI thread
-            IProgress<int> progress = new Progress<int>(p =>
-            {
-                if (p == 1)
-                    applyInterest();
-                else
-                    Balance = 100 - p;
-            });
-            await Task.Run(() => interestLoop(progress));
+            progress.Report(1);
+            sleep(3); // 3 secs
         }
-
-        public void interestLoop(IProgress<int> progress)
+        progress.Report(95);
+        for (int p = 96; p <= 100; ++p) // 5 secs delay
         {
-            myThread = Thread.CurrentThread;
-            _shouldStop = false;
-            try { Thread.Sleep(3000); } catch (Exception) { } // 3 secs
-            while (!_shouldStop)
-            {
-                progress.Report(1);
-                try { Thread.Sleep(3000); } catch (Exception) { } // 3 secs
-            }
-            progress.Report(95);
-            for (int p = 96; p <= 100; ++p) // 5 secs delay
-            {
-                Thread.Sleep(1000);
-                progress.Report(p);
-            }
+            sleep(1);
+            progress.Report(p);
         }
+    }
 
-        public void Deposit(int amount) => Balance += amount;
+    public void Close()
+    {
+        _shouldStop = true;
+        _myThread?.Interrupt();
+    }
 
-        public bool Withdraw(int amount)
-        {
-            if (amount > Balance) return false;
-            Balance -= amount;
-            return true;
-        }
-
-        private void applyInterest() => Balance = (Balance * (100 + interestRate)) / 100;
-
-        public void Close()
-        {
-            _shouldStop = true;
-            myThread.Interrupt();
-        }
+    static void sleep(double seconds)
+    {
+        try { Thread.Sleep((int)(seconds * 1000)); } catch (Exception) { }
     }
 }

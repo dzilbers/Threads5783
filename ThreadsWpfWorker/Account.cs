@@ -6,67 +6,61 @@ namespace ThreadsWpfWorker
 {
     class Account
     {
-        private static Account account = null;
+        private static readonly Account? s_account = null;
 
-        public static event EventHandler<AccountEventArgs> AccountClosed;
-        private static void accountClosedHandler(object result) => AccountClosed?.Invoke(account, new AccountEventArgs((int)result));//if (AccountClosed != null)//    AccountClosed(account, new EventArgs());
+        public static event EventHandler<AccountEventArgs>? AccountClosed;
+        private static void accountClosedHandler(object result) => AccountClosed?.Invoke(s_account, new AccountEventArgs((int)result));//if (AccountClosed != null)//    AccountClosed(account, new EventArgs());
 
-        public static event EventHandler<AccountEventArgs> BalanceChanged;
-        private static void balanceChangedHandler(int balance) => BalanceChanged?.Invoke(account, new AccountEventArgs(balance));
+        public static event EventHandler<AccountEventArgs>? BalanceChanged;
+        private static void balanceChangedHandler(int balance) => BalanceChanged?.Invoke(s_account, new AccountEventArgs(balance));
 
-        private int balance;
+        private int _balance;
         private int Balance
         {
-            get { return balance; }
+            get { return _balance; }
             set
             {
-                if (balance != value)
+                if (_balance != value)
                 {
-                    balance = value;
+                    _balance = value;
                     balanceChangedHandler(value);
                 }
             }
         }
 
-        private readonly int interestRate; // integer % number
+        private readonly int _interestRate; // integer % number
         //private volatile bool _shouldStop;
-        private Thread myThread = null;
-        private BackgroundWorker worker = new BackgroundWorker();
+        private Thread? _myThread = null;
+        private readonly BackgroundWorker _worker = new();
         public Account(int initBalance, int interestRate)
         {
             Balance = initBalance;
-            this.interestRate = interestRate;
+            this._interestRate = interestRate;
             //BackgroundWorker worker = new BackgroundWorker();
-            worker.RunWorkerCompleted += (sender, args) => accountClosedHandler(args.Result);
-            worker.WorkerReportsProgress = true;
-            worker.ProgressChanged += (sender, args)
-                => Balance = args.ProgressPercentage == 1 ? (int)args.UserState : 100 - args.ProgressPercentage;
-            //{
-            //  if (args.ProgressPercentage == 1)
-            //     applyInterest();
-            //  else
-            //    Balance = 100 - args.ProgressPercentage;
-            //};
-            worker.WorkerSupportsCancellation = true;
-            worker.DoWork += (sender, args) =>
+            _worker.RunWorkerCompleted += (sender, args) => accountClosedHandler(args.Result!);
+            _worker.WorkerReportsProgress = true;
+            _worker.ProgressChanged += (sender, args)
+                => Balance = args.ProgressPercentage == 1 ? (int)args.UserState! : 100 - args.ProgressPercentage;
+            _worker.WorkerSupportsCancellation = true;
+            _worker.DoWork += (sender, args) =>
             {
-                myThread = Thread.CurrentThread;
+                _myThread = Thread.CurrentThread;
                 //_shouldStop = false;
                 try { Thread.Sleep(3000); } catch (ThreadInterruptedException) { } // 3 secs
-                while (!worker.CancellationPending) //(!_shouldStop)
+                while (!_worker.CancellationPending) //(!_shouldStop)
                 {
                     applyInterest(); // worker.ReportProgress(1);
                     try { Thread.Sleep(3000); } catch (ThreadInterruptedException) { } // 3 secs
                 }
-                worker.ReportProgress(95);
+                _worker.ReportProgress(95);
                 for (int p = 96; p <= 100; ++p) // 5 secs delay
                 {
                     Thread.Sleep(1000);
-                    worker.ReportProgress(p);
+                    _worker.ReportProgress(p);
                 }
                 args.Result = -999;
             };
-            worker.RunWorkerAsync();
+            _worker.RunWorkerAsync();
         }
 
         public void Deposit(int amount) => Balance += amount;
@@ -78,13 +72,13 @@ namespace ThreadsWpfWorker
             return true;
         }
 
-        private void applyInterest() => worker.ReportProgress(1, (Balance * (100 + interestRate)) / 100);
+        private void applyInterest() => _worker.ReportProgress(1, (Balance * (100 + _interestRate)) / 100);
 
         public void Close()
         {
             //_shouldStop = true;
-            worker.CancelAsync();
-            myThread.Interrupt();
+            _worker.CancelAsync();
+            _myThread!.Interrupt();
         }
     }
 }

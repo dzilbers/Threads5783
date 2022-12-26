@@ -1,4 +1,4 @@
-﻿namespace ThreadsWpfWorker;
+﻿namespace ThreadsWpf;
 
 /// <summary>
 /// Interaction logic for OtherWindow.xaml
@@ -14,5 +14,5 @@ public partial class OtherWindow : Window
         InitializeComponent();
     }
 
-    private void button_Click(object sender, RoutedEventArgs e) => ++Counter;
+    public void ButtonClick(object sender, RoutedEventArgs e) => ++Counter;
 }

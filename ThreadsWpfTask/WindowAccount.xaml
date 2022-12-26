@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ThreadsWpfTask"
         mc:Ignorable="d"
         Title="My Account" Height="auto" Width="auto"
-        Closing="Window_Closing" Loaded="Window_Loaded" SizeToContent="WidthAndHeight"
+        Closing="window_Closing" Loaded="window_Loaded" SizeToContent="WidthAndHeight"
         Style="{StaticResource WinAll}">
     <StackPanel Background="LightBlue">
         <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" VerticalAlignment="Top" Margin="10,10,10,10">
@@ -22,7 +22,6 @@
             <TextBox x:Name="txtWithdraw" Text="" Width="150pt" PreviewKeyDown="textBox_PreviewKeyDown"/>
         </StackPanel>
         <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal" Margin="10,10,10,10">
-            <Button x:Name="btnOther"  Content="Create Window" HorizontalAlignment="Left" Click="btnOther_Click" Width="200pt" Margin="0,0,10,0"/>
             <Button x:Name="btnStop"  Content="Stop" HorizontalAlignment="Right" Click="btnStop_Click" Width="150pt" Margin="10,0,0,0"/>
         </StackPanel>
     </StackPanel>
