@@ -1,38 +1,34 @@
-﻿namespace ThreadsWpfTask;
+﻿using System.Runtime.CompilerServices;
+
+namespace ThreadsWpfTask;
 
 class Account
 {
-    private static Account? s_account = null;
-
-    public static event EventHandler<AccountEventArgs>? BalanceChanged;
-    private static void balanceChangedHandler(int balance) => BalanceChanged?.Invoke(s_account, new AccountEventArgs(balance));
-
-    private int _balance;
-    private int Balance
+    int _balance;
+    int Balance
     {
         get => _balance;
-        set
-        {
-            if (_balance != value)
-            {
-                _balance = value;
-                balanceChangedHandler(value);
-            }
-        }
+        set { if (_balance != value) balanceChangedHandler(_balance = value); }
     }
 
-    private readonly int _interestRate; // integer % number
-    private volatile bool _shouldStop;
-    private Thread? _myThread = null;
+    readonly int _interestRate; // integer % number
+
+    public event EventHandler<AccountEventArgs>? BalanceChanged;
+    void balanceChangedHandler(int balance) => BalanceChanged?.Invoke(this, new AccountEventArgs(balance));
+
+    Thread? _myThread = null;
+    volatile bool _shouldStop;
+
     public Account(int initBalance, int interestRate)
     {
-        s_account = this;
         Balance = initBalance;
         _interestRate = interestRate;
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Deposit(int amount) => Balance += amount;
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public bool Withdraw(int amount)
     {
         if (amount > Balance) return false;
@@ -45,30 +41,34 @@ class Account
         // the progress object must be produced in the context of UI thread
         IProgress<int> progress = new Progress<int>(p =>
         {
-            if (p == 1)
+            if (p == 100)
                 applyInterest();
             else
-                Balance = 100 - p;
+                countDown(p);
         });
         await Task.Run(() => interestLoop(progress));
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     void applyInterest() => Balance = (Balance * (100 + _interestRate)) / 100;
+
+    [MethodImpl(MethodImplOptions.Synchronized)]
+    void countDown(int amount) => Balance = amount;
+
     void interestLoop(IProgress<int> progress)
     {
         _myThread = Thread.CurrentThread;
         _shouldStop = false;
-        sleep(3.0); // 3 secs
+        sleep(3);
         while (!_shouldStop)
         {
-            progress.Report(1);
-            sleep(3); // 3 secs
+            progress.Report(100);
+            sleep(3);
         }
-        progress.Report(95);
-        for (int p = 96; p <= 100; ++p) // 5 secs delay
+        for (int p = 5; p >= 0; --p) // 5 secs delay
         {
-            sleep(1);
             progress.Report(p);
+            sleep(1);
         }
     }
 
@@ -80,6 +80,6 @@ class Account
 
     static void sleep(double seconds)
     {
-        try { Thread.Sleep((int)(seconds * 1000)); } catch (Exception) { }
+        try { Thread.Sleep((int)(seconds * 1000)); } catch (ThreadInterruptedException) { }
     }
 }

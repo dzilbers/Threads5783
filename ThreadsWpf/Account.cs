@@ -1,58 +1,53 @@
 ﻿namespace ThreadsWpf;
+using System.Runtime.CompilerServices;
 
 class Account
 {
+    int _balance;
+    int Balance
+    {
+        get => _balance;
+        set { if (_balance != CLOSED && _balance != value) balanceChangedHandler(_balance = value); }
+    }
+
+    readonly int _interestRate; // integer % number
+
+    Thread? _myThread;
     public enum AccountState { RUNNING, STOPCLOSED, STOP }
+    private volatile AccountState _shouldStop;
     public const int CLOSED = -999999;
 
     public event EventHandler<AccountEventArgs>? BalanceChanged;
-    void balanceChangedHandler(int balance) =>
-        new Thread((obj) => BalanceChanged?.Invoke(this, (AccountEventArgs)obj!)
-                  ).Start(new AccountEventArgs(balance));
-    //BalanceChanged(this, new AccountEventArgs(balance));
+    void balanceChangedHandler(int balance) => new Thread((arg) => BalanceChanged?.Invoke(this, (AccountEventArgs)arg!))
+                                                        .Start(new AccountEventArgs(balance));
 
-    private int _balance;
-    private int Balance
-    {
-        get { return _balance; }
-        set
-        {
-            if (_balance == CLOSED) return;
-            if (_balance != value)
-            {
-                _balance = value;
-                balanceChangedHandler(value);
-            }
-        }
-    }
-
-    private readonly int _interestRate; // integer % number
-    private Thread? _myThread;
-    private volatile AccountState _shouldStop;
     public Account(int initBalance, int interestRate)
     {
-        Balance = initBalance;
         this._interestRate = interestRate;
         new Thread(() =>
         {
+            Balance = initBalance;
             _myThread = Thread.CurrentThread;
             _shouldStop = AccountState.RUNNING;
+            sleep(3);
             while (_shouldStop == AccountState.RUNNING)
             {
                 applyInterest();
-                Thread.Sleep(3000); // 3 secs
+                sleep(3);
             }
-            for (Balance = 5; Balance > 0; Balance--)
+            for (int count = 5; count >= 0; --count)
             {
-                Thread.Sleep(1000); // 5 secs delay
+                countDown(count);
+                sleep(1); // 5 secs delay
             }
-            if (_shouldStop == AccountState.STOPCLOSED)
-                Balance = CLOSED;
+            if (_shouldStop == AccountState.STOPCLOSED) setClosed();
         }).Start();
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Deposit(int amount) => Balance += amount;
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public bool Withdraw(int amount)
     {
         if (amount > Balance) return false;
@@ -60,14 +55,26 @@ class Account
         return true;
     }
 
-    private void applyInterest() => Balance = (Balance * (100 + _interestRate)) / 100;
+    [MethodImpl(MethodImplOptions.Synchronized)]
+    void applyInterest() => Balance = (Balance * (100 + _interestRate)) / 100;
 
-    public void Close(bool upd) => _shouldStop = upd ? AccountState.STOPCLOSED : AccountState.STOP;
+    [MethodImpl(MethodImplOptions.Synchronized)]
+    void countDown(int amount) => Balance = amount;
+
+    [MethodImpl(MethodImplOptions.Synchronized)]
+    void setClosed() => Balance = CLOSED;
+
+    public void Close(bool upd)
+    {
+        _shouldStop = upd ? AccountState.STOPCLOSED : AccountState.STOP;
+        _myThread?.Interrupt();
+    }
 
     public bool ThreadFinished(bool sync)
     {
-        if (_myThread == null)
+        if (_myThread is null)
             return true;
+
         if (sync)
         {
             _myThread.Join();
@@ -75,5 +82,10 @@ class Account
         }
         bool t = !_myThread.IsAlive;
         return t;
+    }
+
+    static void sleep(double seconds)
+    {
+        try { Thread.Sleep((int)(seconds * 1000)); } catch (ThreadInterruptedException) { }
     }
 }

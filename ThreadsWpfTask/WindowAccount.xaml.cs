@@ -24,7 +24,13 @@ public partial class WindowAccount : Window
 
     void windowAccountObserver(object? sender, AccountEventArgs args) => updateBalance(args.Balance);
 
-    void updateBalance(int balance) => Balance = balance;
+    void updateBalance(int balance)
+    {
+        if (CheckAccess())
+            Balance = balance;
+        else
+            Dispatcher.BeginInvoke((Action<int>)(x => Balance = x), balance);
+    }
 
     // Example for avoiding closing the window...
     void window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -38,12 +44,12 @@ public partial class WindowAccount : Window
 
     async void window_Loaded(object sender, RoutedEventArgs e)
     {
-        Account.BalanceChanged += windowAccountObserver;
         _myAccount = new Account(1000, 2);
+        _myAccount.BalanceChanged += windowAccountObserver;
         await _myAccount.RunInterestTask(); // Run task of interest without blocking (see inside)
         // We continue here only after the interest task finished
         _myClosing = true;
-        Account.BalanceChanged -= windowAccountObserver;
+        _myAccount.BalanceChanged -= windowAccountObserver;
         _myAccount = null;
         // Prepare for window closing...
         // Let application to close after the window is closed

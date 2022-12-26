@@ -24,13 +24,20 @@ public partial class WindowAccount : Window
         InitializeComponent();
     }
 
-    void windowAccountObserver(object? sender, AccountEventArgs args) =>
-        // Before changing to Dispatcher - crashes with InvalidOperation
-        // Comment it out
-        //updateBalance(args.Balance);
-        // Uncomment one of the next two lines it upon commenting out the above line
-        //UpdateBalance(args.Balance);
-        UpdateBalanceCond(args.Balance);//UpdateBalance2(args.Balance);//UpdateBalance3(args.Balance);
+    enum Examples { Buggy, Fixed, Conditional }
+    // change the initialization for appropriate example Buggy => Fixed => Conditional
+    static readonly Examples s_example = Examples.Buggy;
+
+    void windowAccountObserver(object? sender, AccountEventArgs args)
+    {
+        switch (s_example)
+        {
+            // Before changing to Dispatcher - crashes with InvalidOperation
+            case Examples.Buggy: updateBalance(args.Balance); break;
+            case Examples.Fixed: updateBalanceThreadSafe(args.Balance); break;
+            case Examples.Conditional: updateBalanceCondThreadSafe(args.Balance); break;
+        };
+    }
 
     void updateBalance(int balance)
     {
@@ -51,26 +58,13 @@ public partial class WindowAccount : Window
         }
     }
 
-    // Uncomment it when going to WPF Dispatcher usage...
-    public void UpdateBalance(int balance)
+    void updateBalanceThreadSafe(int balance)
     {
         if (CheckAccess())
             updateBalance(balance);
         else
             Dispatcher.BeginInvoke((Action<int>)(x => updateBalance(x)), balance);
     }
-
-    public void UpdateBalance2(int balance)
-    {
-        BackgroundWorker worker = new();
-        worker.DoWork += (sender, args) => updateBalance((int)args.Argument!);
-        //worker.RunWorkerCompleted += worker_RunWorkerCompleted;
-        //worker.WorkerReportsProgress = true;
-        //worker.ProgressChanged += worker_ProgressChanged;
-        worker.RunWorkerAsync(balance);
-    }
-
-    public async void UpdateBalance3(int balance) => await Task.Run(() => updateBalance(balance));
 
     // Example for avoiding closint the window...
     void window_Closing(object sender, CancelEventArgs e)
@@ -150,21 +144,9 @@ public partial class WindowAccount : Window
         return !_stopMessageBox && balance < 500;
     }
 
-    public void UpdateBalanceCond(int balance) => warnLowBalance(CheckAccess() ? updateBalanceCond(balance) :
+    void updateBalanceCondThreadSafe(int balance) => warnLowBalance(CheckAccess() ? updateBalanceCond(balance) :
                        (bool)Dispatcher.Invoke((Predicate<int>)(x => updateBalanceCond(x)), balance)
                       );
-
-    public void UpdateBalanceCond2(int balance)
-    {
-        BackgroundWorker worker = new();
-        worker.DoWork += (sender, args) => { args.Result = updateBalanceCond((int)args.Argument!); };
-        worker.RunWorkerCompleted += (sender, args) => warnLowBalance((bool)args.Result!);
-        //worker.WorkerReportsProgress = true;
-        //worker.ProgressChanged += worker_ProgressChanged;
-        worker.RunWorkerAsync(balance);
-    }
-
-    public async void UpdateBalanceCond3(int balance) => warnLowBalance(await Task<bool>.Run(() => updateBalanceCond(balance)));
 
     bool _warned = false;
     void warnLowBalance(bool check)

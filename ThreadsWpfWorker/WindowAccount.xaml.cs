@@ -7,7 +7,7 @@ using System.Windows.Input;
 /// </summary>
 public partial class WindowAccount : Window
 {
-    Account? _myAccount;
+    Account? _myAccount = null;
     bool _myClosing = false;
 
     public static readonly DependencyProperty BalanceProp = DependencyProperty.Register(nameof(Balance), typeof(int), typeof(WindowAccount));
@@ -28,8 +28,8 @@ public partial class WindowAccount : Window
     {
         MessageBoxResult result = MessageBox.Show("" + args.Balance, "Results", MessageBoxButton.OKCancel);
         _myClosing = true;
-        Account.BalanceChanged -= windowAccountObserver;
-        Account.AccountClosed -= windowAccountClosedObserver;
+        _myAccount!.BalanceChanged -= windowAccountObserver;
+        _myAccount!.AccountClosed -= windowAccountClosedObserver;
         _myAccount = null;
         // Prepare for window closing...
         // Let application to close after the window is closed
@@ -41,7 +41,13 @@ public partial class WindowAccount : Window
         // Window.GetWindow(this).Close();
     }
 
-    void updateBalance(int balance) => Balance = balance;
+    void updateBalance(int balance)
+    {
+        if (CheckAccess())
+            Balance = balance;
+        else
+            Dispatcher.BeginInvoke((Action<int>)(x => Balance = x), balance);
+    }
 
     // Example for avoiding closing the window...
     void window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -55,9 +61,9 @@ public partial class WindowAccount : Window
 
     void window_Loaded(object sender, RoutedEventArgs e)
     {
-        Account.BalanceChanged += windowAccountObserver;
-        Account.AccountClosed += windowAccountClosedObserver;
         _myAccount = new Account(1000, 2);
+        _myAccount.BalanceChanged += windowAccountObserver;
+        _myAccount.AccountClosed += windowAccountClosedObserver;
     }
 
     void btnStop_Click(object sender, RoutedEventArgs e)
