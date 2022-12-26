@@ -24,11 +24,11 @@ public partial class WindowAccount : Window
         InitializeComponent();
     }
 
-    void windowAccountObserver(object? sender, AccountEventArgs args) => updateBalance(args.Balance);
+    void windowAccountObserver(object? sender, AccountEventArgs args) => updateBalanceThreadSafe(args.Balance);
 
     void windowAccountClosedObserver(object? sender, AccountEventArgs args)
     {
-        MessageBoxResult result = MessageBox.Show("" + args.Balance, "Results", MessageBoxButton.OKCancel);
+        MessageBoxResult result = MessageBox.Show($"{args.Balance}", "Results", MessageBoxButton.OKCancel);
         _myClosing = true;
         _myAccount!.BalanceChanged -= windowAccountObserver;
         _myAccount!.AccountClosed -= windowAccountClosedObserver;
@@ -43,7 +43,7 @@ public partial class WindowAccount : Window
         // Window.GetWindow(this).Close();
     }
 
-    void updateBalance(int balance)
+    void updateBalanceThreadSafe(int balance)
     {
         if (CheckAccess())
             Balance = balance;

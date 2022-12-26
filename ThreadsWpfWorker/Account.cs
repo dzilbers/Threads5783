@@ -6,7 +6,7 @@ class Account
 {
 
     public event EventHandler<AccountEventArgs>? AccountClosed;
-    void accountClosedHandler(object result) => AccountClosed?.Invoke(this, new AccountEventArgs((int)result));//if (AccountClosed != null)//    AccountClosed(account, new EventArgs());
+    void accountClosedHandler(int result) => AccountClosed?.Invoke(this, new AccountEventArgs(result));
 
     public event EventHandler<AccountEventArgs>? BalanceChanged;
     void balanceChangedHandler(int balance) => BalanceChanged?.Invoke(this, new AccountEventArgs(balance));
@@ -26,7 +26,7 @@ class Account
     public Account(int initBalance, int interestRate)
     {
         _interestRate = interestRate;
-        _worker.RunWorkerCompleted += (sender, args) => accountClosedHandler(args.Result!);
+        _worker.RunWorkerCompleted += (sender, args) => accountClosedHandler((int)args.Result!);
         _worker.WorkerReportsProgress = true;
         _worker.ProgressChanged += (sender, args) => { if (args.ProgressPercentage == 1) applyInterest(); else countDown((int)args.UserState!); };
         _worker.WorkerSupportsCancellation = true;

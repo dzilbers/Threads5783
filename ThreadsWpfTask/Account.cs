@@ -4,6 +4,7 @@ namespace ThreadsWpfTask;
 
 class Account
 {
+    readonly int _initBalance;
     int _balance;
     int Balance
     {
@@ -21,7 +22,7 @@ class Account
 
     public Account(int initBalance, int interestRate)
     {
-        Balance = initBalance;
+        _initBalance = initBalance;
         _interestRate = interestRate;
     }
 
@@ -58,6 +59,7 @@ class Account
     void interestLoop(IProgress<int> progress)
     {
         _myThread = Thread.CurrentThread;
+        Balance = _initBalance;
         _shouldStop = false;
         sleep(3);
         while (!_shouldStop)
