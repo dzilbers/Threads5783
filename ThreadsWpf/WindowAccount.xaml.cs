@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Input;
+using static System.Char;
+using static System.Windows.Input.Keyboard;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml
@@ -24,7 +26,7 @@ public partial class WindowAccount : Window
         InitializeComponent();
     }
 
-    enum Examples { Buggy, Fixed, Conditional }
+    enum Examples : uint { Buggy, Fixed, Conditional } 
     // change the initialization for appropriate example Buggy => Fixed => Conditional
     static readonly Examples s_example = Examples.Buggy;
 
@@ -129,10 +131,10 @@ public partial class WindowAccount : Window
         }
 
         char c = (char)KeyInterop.VirtualKeyFromKey(e.Key);
-        if (Char.IsControl(c) ||
-           (Char.IsDigit(c) && !(Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift) ||
-                                 Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) ||
-                                 Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt)))) return;
+        if (IsControl(c) ||
+           (IsDigit(c) && !(IsKeyDown(Key.LeftShift) || IsKeyDown(Key.RightShift) ||
+                            IsKeyDown(Key.LeftCtrl) || IsKeyDown(Key.RightCtrl) ||
+                            IsKeyDown(Key.LeftAlt) || IsKeyDown(Key.RightAlt)))) return;
 
         e.Handled = true;
         MessageBox.Show("Only numbers are allowed", "Account", MessageBoxButton.OK, MessageBoxImage.Error);
