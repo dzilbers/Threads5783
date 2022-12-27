@@ -16,10 +16,13 @@ class Account
         {
             _myThread = Thread.CurrentThread;
             _shouldStop = false;
+            try { Thread.Sleep(3000); }// 3 seconds
+            catch (ThreadInterruptedException) { }
             while (!_shouldStop)
             {
                 applyInterest();
-                Thread.Sleep(3000); // 3 seconds
+                try { Thread.Sleep(3000); }// 3 seconds
+                catch (ThreadInterruptedException) { }
             }
             Thread.Sleep(5000);  // 5 seconds delay
         }).Start();
@@ -66,6 +69,7 @@ class Account
         timeOutput();
         Console.WriteLine("close: trying");
         _shouldStop = true;
+        //_myThread!.Interrupt();
     }
 
     [MethodImpl(MethodImplOptions.Synchronized)]
