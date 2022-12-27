@@ -69,7 +69,7 @@ class Account
         timeOutput();
         Console.WriteLine("close: trying");
         _shouldStop = true;
-        //_myThread!.Interrupt();
+        _myThread!.Interrupt();
     }
 
     [MethodImpl(MethodImplOptions.Synchronized)]
