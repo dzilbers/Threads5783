@@ -52,7 +52,7 @@
         }
     }
 
-    private void timeOutput() => Console.Write("Account-{1} - {0}: ", DateTime.Now.ToString("HH:mm:ss"), _number);
-    private void out1(string loc) => Console.Write("{0}: old balance = {1}, ", loc, _balance);
-    private void out2() => Console.WriteLine("new balance = {0}, ", _balance);
+    static void timeOutput() => Console.Write($"{DateTime.Now.ToString("HH:mm:ss")}: ");
+    void out1(string loc) => Console.Write($"{loc}: old balance = {_balance}, ");
+    void out2() => Console.WriteLine($"new balance = {_balance}, ");
 }

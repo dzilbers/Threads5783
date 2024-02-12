@@ -18,8 +18,9 @@ class Account
     public const int CLOSED = -999999;
 
     public event EventHandler<AccountEventArgs>? BalanceChanged;
-    void balanceChangedHandler(int balance) => new Thread((arg) => BalanceChanged?.Invoke(this, (AccountEventArgs)arg!))
-                                                        .Start(new AccountEventArgs(balance));
+    void balanceChangedHandler(int balance) => new Thread(
+             (arg) => BalanceChanged?.Invoke(this, (AccountEventArgs)arg!)
+         ).Start(new AccountEventArgs(balance));
 
     public Account(int initBalance, int interestRate)
     {
