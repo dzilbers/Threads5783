@@ -10,7 +10,7 @@
     {
         _number = ++s_counter;
         _balance = initBalance;
-        this._interestRate = interestRate;
+        _interestRate = interestRate;
         Thread th = new(InterestLoop) { Name = "Thread-" + _number }; // TCB
         th.Start();
     }

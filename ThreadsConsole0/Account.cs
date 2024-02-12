@@ -6,7 +6,7 @@
     public Account(int initBalance, int interestRate)
     {
         _balance = initBalance;
-        this._interestRate = interestRate;
+        _interestRate = interestRate;
     }
 
     public void Deposit(int amount)
