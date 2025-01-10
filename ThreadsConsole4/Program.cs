@@ -2,14 +2,8 @@
 
 Account myAccount = new(1000, 2);
 
-bool finishing = false;
 while (!myAccount.ThreadFinished(false))
 {
-    if (finishing)
-    {
-        Thread.Sleep(1000);
-        continue;
-    }
     ConsoleKeyInfo keyInfo = Console.ReadKey(true);
     switch (keyInfo.KeyChar)
     {
@@ -21,9 +15,8 @@ while (!myAccount.ThreadFinished(false))
             break;
         case '0':
             myAccount.Close();
-            //finishing = true;
-            myAccount.ThreadFinished(true); 
+            myAccount.ThreadFinished(true);
+            Thread.Sleep(200);
             break;
     }
-    
 }

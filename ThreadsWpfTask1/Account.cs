@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace ThreadsWpfTask;
+namespace ThreadsWpfTask2;
 
 class Account
 {

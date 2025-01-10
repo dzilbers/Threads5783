@@ -28,7 +28,7 @@ public partial class WindowAccount : Window
 
     enum Examples : uint { Buggy, Fixed, Conditional }
     // change the initialization for appropriate example Buggy => Fixed => Conditional
-    static readonly Examples s_example = Examples.Buggy;
+    static readonly Examples s_example = Examples.Conditional;
 
     void windowAccountObserver(object? sender, AccountEventArgs args)
     {
@@ -169,7 +169,7 @@ public partial class WindowAccount : Window
                                                   "Account warning",
                                                   MessageBoxButton.OK,
                                                   MessageBoxImage.Exclamation)
-                          ).Start();
+                          ).Start(); 
             }
         }
         else

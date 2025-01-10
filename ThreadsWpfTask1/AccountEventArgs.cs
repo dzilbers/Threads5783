@@ -1,4 +1,4 @@
-﻿namespace ThreadsWpfTask;
+﻿namespace ThreadsWpfTask2;
 
 class AccountEventArgs : EventArgs
 {

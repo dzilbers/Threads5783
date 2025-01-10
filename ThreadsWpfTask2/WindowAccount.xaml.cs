@@ -1,4 +1,4 @@
-﻿namespace ThreadsWpfTask;
+﻿namespace ThreadsWpfTask2;
 using System.Windows.Controls;
 using System.Windows.Input;
 using static System.Char;
@@ -48,7 +48,7 @@ public partial class WindowAccount : Window
     {
         _myAccount = new Account(1000, 2);
         _myAccount.BalanceChanged += windowAccountObserver;
-        await _myAccount.RunInterestTask(); // Run task of interest without blocking (see inside)
+        await _myAccount.StartAsync();
         // We continue here only after the interest task finished
         _myClosing = true;
         _myAccount.BalanceChanged -= windowAccountObserver;

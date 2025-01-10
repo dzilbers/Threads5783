@@ -28,7 +28,7 @@ class Account
         }).Start();
     }
 
-    [MethodImpl(MethodImplOptions.Synchronized)]
+    //[MethodImpl(MethodImplOptions.Synchronized)]
     public void Deposit(int amount)
     {
         timeOutput();
@@ -37,7 +37,7 @@ class Account
         out2();
     }
 
-    [MethodImpl(MethodImplOptions.Synchronized)]
+    //[MethodImpl(MethodImplOptions.Synchronized)]
     public bool Withdraw(int amount)
     {
         timeOutput();
@@ -53,7 +53,7 @@ class Account
         return true;
     }
 
-    [MethodImpl(MethodImplOptions.Synchronized)]
+    //[MethodImpl(MethodImplOptions.Synchronized)]
     private void applyInterest()
     {
         timeOutput();
@@ -62,7 +62,7 @@ class Account
         out2();
     }
 
-    [MethodImpl(MethodImplOptions.Synchronized)]
+    //[MethodImpl(MethodImplOptions.Synchronized)]
     public void Close()
     {
         // NEVER ABORT A THREAD LIKE THIS: myThread.Abort(); // IT IS DANGEROUS
@@ -72,9 +72,9 @@ class Account
         _myThread!.Interrupt();
     }
 
-    [MethodImpl(MethodImplOptions.Synchronized)]
+    //[MethodImpl(MethodImplOptions.Synchronized)]
     public bool ThreadFinished(bool sync)
-    {
+    {   
         timeOutput();
         if (_myThread == null)
         {
@@ -94,10 +94,10 @@ class Account
         return t;
     }
 
-    [MethodImpl(MethodImplOptions.Synchronized)]
+    //[MethodImpl(MethodImplOptions.Synchronized)]
     static void timeOutput() => Console.Write($"{DateTime.Now.ToString("HH:mm:ss")}: ");
-    [MethodImpl(MethodImplOptions.Synchronized)]
+    //[MethodImpl(MethodImplOptions.Synchronized)]
     void out1(string loc) => Console.Write($"{loc}: old balance = {_balance}, ");
-    [MethodImpl(MethodImplOptions.Synchronized)]
+    //[MethodImpl(MethodImplOptions.Synchronized)]
     void out2() => Console.WriteLine($"new balance = {_balance}, ");
 }
