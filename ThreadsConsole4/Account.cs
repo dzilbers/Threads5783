@@ -95,7 +95,7 @@ class Account
     }
 
     //[MethodImpl(MethodImplOptions.Synchronized)]
-    static void timeOutput() => Console.Write($"{DateTime.Now.ToString("HH:mm:ss")}: ");
+    static void timeOutput() => Console.Write($"{DateTime.Now:HH:mm:ss}: ");
     //[MethodImpl(MethodImplOptions.Synchronized)]
     void out1(string loc) => Console.Write($"{loc}: old balance = {_balance}, ");
     //[MethodImpl(MethodImplOptions.Synchronized)]

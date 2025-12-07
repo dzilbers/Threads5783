@@ -1,10 +1,10 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace ThreadsWpfTask2;
+namespace ThreadsWpfTask1;
 
-class Account
+class Account(int initBalance, int interestRate)
 {
-    readonly int _initBalance;
+    readonly int _initBalance = initBalance;
     int _balance;
     int Balance
     {
@@ -12,19 +12,13 @@ class Account
         set { if (_balance != value) balanceChangedHandler(_balance = value); }
     }
 
-    readonly int _interestRate; // integer % number
+    readonly int _interestRate = interestRate; // integer % number
 
     public event EventHandler<AccountEventArgs>? BalanceChanged;
     void balanceChangedHandler(int balance) => BalanceChanged?.Invoke(this, new AccountEventArgs(balance));
 
     Thread? _myThread = null;
     volatile bool _shouldStop;
-
-    public Account(int initBalance, int interestRate)
-    {
-        _initBalance = initBalance;
-        _interestRate = interestRate;
-    }
 
     [MethodImpl(MethodImplOptions.Synchronized)]
     public void Deposit(int amount) => Balance += amount;

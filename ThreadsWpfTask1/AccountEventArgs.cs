@@ -1,7 +1,6 @@
-﻿namespace ThreadsWpfTask2;
+﻿namespace ThreadsWpfTask1;
 
-class AccountEventArgs : EventArgs
+class AccountEventArgs(int balance) : EventArgs
 {
-    public int Balance { get; private set; }
-    public AccountEventArgs(int balance) => Balance = balance;
+    public int Balance { get; private set; } = balance;
 }

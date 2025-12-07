@@ -2,10 +2,10 @@
 
 namespace ThreadsWpfTask2;
 
-class Account
+class Account(int initBalance, int interestRate)
 {
-    readonly int _initBalance;
-    readonly int _interestRate; // integer % number
+    readonly int _initBalance = initBalance;
+    readonly int _interestRate = interestRate; // integer % number
 
     int _balance;
     int Balance
@@ -21,12 +21,6 @@ class Account
 
     Thread? _myThread = null;
     volatile bool _shouldStop;
-
-    public Account(int initBalance, int interestRate)
-    {
-        _initBalance = initBalance;
-        _interestRate = interestRate;
-    }
 
     [MethodImpl(MethodImplOptions.Synchronized)]
     public void Deposit(int amount) => Balance += amount;

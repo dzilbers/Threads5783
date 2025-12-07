@@ -50,7 +50,7 @@
         }
     }
 
-    static void timeOutput() => Console.Write($"{DateTime.Now.ToString("HH:mm:ss")}: ");
+    static void timeOutput() => Console.Write($"{DateTime.Now:HH:mm:ss}: ");
     void out1(string loc) => Console.Write($"{loc}: old balance = {_balance}, ");
     void out2() => Console.WriteLine($"new balance = {_balance}, ");
 }

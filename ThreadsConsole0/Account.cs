@@ -1,13 +1,7 @@
-﻿class Account
+﻿class Account(int initBalance, int interestRate)
 {
-    int _balance;
-    readonly int _interestRate; // integer % number
-
-    public Account(int initBalance, int interestRate)
-    {
-        _balance = initBalance;
-        _interestRate = interestRate;
-    }
+    int _balance = initBalance;
+    readonly int _interestRate = interestRate; // integer % number
 
     public void Deposit(int amount)
     {
@@ -46,7 +40,7 @@
         }
     }
 
-    static void timeOutput() => Console.Write($"{DateTime.Now.ToString("HH:mm:ss")}: ");
+    static void timeOutput() => Console.Write($"{DateTime.Now:HH:mm:ss}: ");
     void out1(string loc) => Console.Write($"{loc}: old balance = {_balance}, ");
     void out2() => Console.WriteLine($"new balance = {_balance}, ");
 }

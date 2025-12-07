@@ -1,4 +1,4 @@
-﻿namespace ThreadsWpfTask2;
+﻿namespace ThreadsWpfTask1;
 using System.Windows.Controls;
 using System.Windows.Input;
 using static System.Char;
